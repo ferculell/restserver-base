@@ -6,6 +6,7 @@ class Server {
     constructor() {
         this.app = express();
         this.port = process.env.PORT || 3000;
+        this.rutaUsuarios = '/api/usuarios';
 
         // Middlewares
         this.middlewares();
@@ -18,13 +19,16 @@ class Server {
         // CORS
         this.app.use( cors() );
 
+        // Lectura y parseo de json
+        this.app.use( express.json() );
+
         // Directorios públicos
-        this.app.use( express.static('public') )
+        this.app.use( express.static('public') );
     }
 
     routes() {
 
-        this.app.use('/api/usuarios', require('../routes/user'));
+        this.app.use( this.rutaUsuarios, require('../routes/usuarios') );
 
     }
 
