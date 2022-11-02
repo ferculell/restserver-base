@@ -17,28 +17,14 @@ class Server {
     middlewares() {
         // CORS
         this.app.use( cors() );
-        
+
         // Directorios públicos
         this.app.use( express.static('public') )
     }
 
     routes() {
 
-        this.app.get('/api', (req, res) => {
-            res.json({message: 'Hello GET!'});
-        })
-
-        this.app.post('/api', (req, res) => {
-            res.status(201).json({message: 'Hello POST!'});
-        })
-
-        this.app.put('/api', (req, res) => {
-            res.json({message: 'Hello PUT!'});
-        })
-
-        this.app.delete('/api', (req, res) => {
-            res.json({message: 'Hello DELETE!'});
-        })
+        this.app.use('/api/usuarios', require('../routes/user'));
 
     }
 
