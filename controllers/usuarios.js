@@ -51,8 +51,17 @@ const putUsuarios = async(req, res) => {
     res.status(201).json({usuario});
 }
 
-const deleteUsuarios = (req, res) => {
-    res.json({message: 'Hello DELETE!', from: 'Controller'});
+const deleteUsuarios = async(req, res) => {
+
+    const { id } = req.params;
+
+    // Borrado físico --NO RECOMENDADO--
+    // const usuario = await Usuario.findByIdAndDelete(id);
+
+    // Borrado modificando el estado --RECOMENDADO--
+    const usuario = await Usuario.findByIdAndUpdate(id, {estado: false});
+
+    res.json(usuario);
 }
 
 module.exports = {
