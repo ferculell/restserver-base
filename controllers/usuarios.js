@@ -3,11 +3,20 @@ const bcryptjs = require('bcryptjs');
 const Usuario = require('../models/usuario');
 
 
-const getUsuarios = (req = request, res = response) => {
+const getUsuarios = async(req = request, res = response) => {
 
-    const { q, nombre = 'No Name', key } = req.query;
+    const { limite = 5, desde = 0 } = req.query;
+    const query = {estado: true};
 
-    res.json({message: 'Hello GET!', from: 'Controller', q, nombre, key});
+
+    const [ total, usuarios ] = await Promise.all([
+        Usuario.countDocuments(query),
+        Usuario.find(query)
+                    .skip(Number(desde))
+                    .limit(Number(limite))
+    ]);
+
+    res.json({ total, usuarios });
 }
 
 const postUsuarios = async(req, res = response) => {
@@ -26,11 +35,20 @@ const postUsuarios = async(req, res = response) => {
     res.status(201).json({usuario});
 }
 
-const putUsuarios = (req, res) => {
+const putUsuarios = async(req, res) => {
 
     const { id } = req.params;
+    const { _id, password, google, correo, ...datos } = req.body;
 
-    res.json({message: 'Hello PUT!', from: 'Controller', id});
+    if (password) {
+        // Encriptar contraseña
+        const salt = bcryptjs.genSaltSync();
+        datos.password = bcryptjs.hashSync(password, salt);
+    }
+
+    const usuario = await Usuario.findByIdAndUpdate(id, datos);
+
+    res.status(201).json({usuario});
 }
 
 const deleteUsuarios = (req, res) => {
