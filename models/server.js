@@ -9,6 +9,7 @@ class Server {
         this.port = process.env.PORT || 3000;
         this.rutaAuth = '/api/auth';
         this.rutaCategorias = '/api/categorias';
+        this.rutaProductos = '/api/productos';
         this.rutaUsuarios = '/api/usuarios';
 
         // Conectar base de datos
@@ -40,6 +41,7 @@ class Server {
 
         this.app.use( this.rutaAuth, require('../routes/auth') );
         this.app.use( this.rutaCategorias, require('../routes/categorias') );
+        this.app.use( this.rutaProductos, require('../routes/productos') );
         this.app.use( this.rutaUsuarios, require('../routes/usuarios') );
 
     }

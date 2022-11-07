@@ -59,7 +59,12 @@ const actualizarCategoria = async(req = request, res = response) => {
     const { nombre } = req.body;
     const { usuario } = req.usuario; // Usuario autenticado
 
-    const categoria = await Categoria.findByIdAndUpdate(id, {nombre: nombre.toUpperCase(), usuario});
+    const data = {
+        nombre: nombre.toUpperCase(), 
+        usuario
+    };
+
+    const categoria = await Categoria.findByIdAndUpdate(id, data, {new: true});
 
     res.status(201).json({categoria});
 }
